@@ -1,0 +1,1 @@
+export const logoPath = 'https://epremierleague-team-owner-images.s3.amazonaws.com/uploads/';

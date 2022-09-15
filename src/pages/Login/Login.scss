@@ -1,0 +1,52 @@
+.login {
+  &__btn {
+    &--disabled,
+    &:disabled {
+      background-color: #aaa !important;
+    }
+  }
+
+  &__form {
+    &-container {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background-color: #131825;
+      height: 100%;
+      width: 100%;
+      opacity: .4;
+      z-index: -1;
+    }
+  }
+
+  &__img {
+    &-container {
+      width: 100%;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background-size: 100% 100%;
+      opacity: .8;
+      background-repeat: no-repeat;
+      background-image: url("../../img/old-trafford.jpg");
+      z-index: -2;
+      background-position: center;
+      background-color: #131825;
+    }
+    
+    &-backdrop {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      opacity: .3;
+      background-color: #000;
+      z-index: -1;
+    }
+  }
+}

@@ -1,0 +1,18 @@
+.landing {
+  &__img {
+    &-container {
+      width: 100%;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-image: url("../../img/bruno-fernandes.jpg");
+      z-index: -2;
+      background-position: center;
+      background-color: #131825;
+    }
+  }
+}
