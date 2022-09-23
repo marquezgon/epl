@@ -17,13 +17,6 @@ import { useUserStore } from '../../store';
 import { logoPath } from '../../utils/utils';
 
 const pages = ['Iniciar Sesión'];
-const settings = ['Mi Perfil', 'Cerrar Sesión'];
-
-interface Data {
-  name: string;
-  owner_name: string;
-  logo: string;
-} 
 
 const TopBar = () => {
   const currentUser = getCurrentUser();
@@ -31,7 +24,6 @@ const TopBar = () => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const navigate = useNavigate();
   const userInfo: any | null = useUserStore((state) => state.user);
-  console.log('user is: ', userInfo);
 
   useEffect(() => {
     const onError = () => navigate('/login');

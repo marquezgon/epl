@@ -8,7 +8,10 @@ import {
   lightBlue,
   mainBlue,
   darkBlue,
-  white
+  white,
+  lightGray,
+  darkGray,
+  mainGray
 } from './colors';
 
 const themeConfig = {
@@ -52,6 +55,12 @@ const themeConfig = {
       light: lightBlue,
       main: mainBlue,
       dark: darkBlue,
+      contrastText: white,
+    },
+    gray: {
+      light: lightGray,
+      main: mainGray,
+      dark: darkGray,
       contrastText: white,
     }
   },

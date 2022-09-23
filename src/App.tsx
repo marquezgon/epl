@@ -6,7 +6,7 @@ import {
 import { ThemeProvider } from '@mui/material/styles';
 import { createAuthLink } from 'aws-appsync-auth-link';
 import { createSubscriptionHandshakeLink } from 'aws-appsync-subscription-link';
-import { ApolloProvider, ApolloClient, ApolloLink, InMemoryCache } from '@apollo/client';
+import { ApolloProvider, ApolloClient, ApolloLink } from '@apollo/client';
 import ProtectedLayout from './components/ProtectedLayout/ProtectedLayout';
 import Transferables from './pages/Transferables/Transferables';
 import Landing from './pages/Landing/Landing';
@@ -15,6 +15,7 @@ import theme from './theme';
 import { AppSyncConfig } from './aws-exports';
 import { getCurrentSession } from './auth';
 import { useAuthStore } from './store';
+import { cache } from './utils/utils';
 
 const App = () => {
   const cognitoSession = useAuthStore((state) => state.cognitoSession);
@@ -32,20 +33,21 @@ const App = () => {
       jwtToken: cognitoSession?.getIdToken().getJwtToken() ?? ''
     }
   }
+
+  
+
   const client = new ApolloClient({
     link: ApolloLink.from([
       createAuthLink(config),
       createSubscriptionHandshakeLink(config)
     ]),
-    cache: new InMemoryCache(),
+    cache,
     defaultOptions: {
       watchQuery: {
         fetchPolicy: 'cache-and-network'
       }
     }
   });
-
-  console.log('here we go again');
 
   return (
     <ApolloProvider client={client}>

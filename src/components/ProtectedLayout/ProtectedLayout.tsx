@@ -15,7 +15,8 @@ const GET_TEAM = gql`
       name
       username
       owner_name
-      logo
+      logo,
+      budget
     }
   }
 `;
@@ -30,8 +31,6 @@ export const ProtectedLayout = () => {
   const currentUser = getCurrentUser();
   const getTeam = useQuery(GET_TEAM, { variables: { username: currentUser?.getUsername() } });
   const updateUser = useUserStore((state) => state.updateUser);
-
-  console.log(getTeam.data);
   
   updateUser(getTeam.data?.getTeamByUsername);
   

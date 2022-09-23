@@ -1,8 +1,9 @@
 import create from 'zustand'
+import { UserData } from '../utils/types';
 
 interface UserState {
-  user: object | null,
-  updateUser: (user: object) => void
+  user: UserData | null,
+  updateUser: (user: UserData) => void
 }
 
 const useUserStore = create<UserState>()((set) => ({
