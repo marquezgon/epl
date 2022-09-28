@@ -24,6 +24,10 @@ export const countryList = {
     flag: '\ud83c\udde9\ud83c\uddea',
     text: 'Alemania'
   },
+  mexico: {
+    flag: '	\ud83c\uddf2\ud83c\uddfd',
+    text: 'México'
+  },
   netherlands: {
     flag: '\ud83c\uddf3\ud83c\uddf1',
     text: 'Holanda'

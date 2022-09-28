@@ -46,14 +46,13 @@ type File = string | ArrayBuffer | null;
 
 const Onboard = () => {
   const [logoPreview, setLogoPreview] = useState<File>(null);
-  const [addTeam, { data, loading, error }] = useMutation(ADD_TEAM);
+  const [addTeam] = useMutation(ADD_TEAM);
   const updateShowOnboarding = useModalStore((state) => state.updateShowOnboarding);
   const showOnboarding = useModalStore((state) => state.showOnboarding);
 
   const currentUser = getCurrentUser();
 
   const handleSubmit = async (values: FormValues) => {
-    console.log(values);
     const username = currentUser?.getUsername()
     if (values.logo && username) {
       const fileExt = values.logo.name.split('.').pop();

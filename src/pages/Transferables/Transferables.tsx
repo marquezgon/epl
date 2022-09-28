@@ -1,29 +1,35 @@
-import { gql, useQuery } from '@apollo/client';
+import React from 'react';
+import { useQuery } from '@apollo/client';
 import TransferablesTable from '../../components/TransferablesTable/TransferablesTable';
 import PlayerDrawer from '../../components/PlayerDrawer/PlayerDrawer';
+import { GET_PLAYERS, SEARCH_PLAYERS } from '../../utils/gql/queries';
+import { useAuthStore } from '../../store/';
 
-const GET_PLAYERS = gql`
-  query ListPlayers($transferable: Int!, $nextToken: String, $limit: Int) {
-    listPlayers(transferable: $transferable, limit: $limit, nextToken: $nextToken) {
-      nextToken
-      items {
-        id
-        name: nickname
-        position
-        price
-        age: dob
-        nationality
-        photo
-        fullName: full_name
-        transferable
-        ownedBy: owned_by
-      }
-    }
-  }
-`;
 
 const Transferables = () => {
+  const [filteredPlayers, setFilteredPlayers] = React.useState<any>({});
+  const apolloClient = useAuthStore((state) => state.apolloClient);
   const { loading, error, data, fetchMore } = useQuery(GET_PLAYERS, { variables: { transferable: 1, limit: 10 } });
+
+  const handleSearch = async (searchTerm: string) => {
+    console.log(searchTerm);
+    const filter = { nickname: { contains: searchTerm }, transferable: { eq: 1 } };
+    try {
+      const result =  await apolloClient.query({
+        query: SEARCH_PLAYERS,
+        variables: { filter }
+      });
+      setFilteredPlayers(result.data);
+    } catch(e) {
+      console.error(e);
+    }
+  }
+
+  const handleSearchChange = (searchTerm: string) => {
+    if (searchTerm === '') {
+      setFilteredPlayers({});
+    }
+  }
 
   const loadMore = () => fetchMore({
     query: GET_PLAYERS,
@@ -52,7 +58,13 @@ const Transferables = () => {
 
   return (
     <>
-      <TransferablesTable players={data.listPlayers?.items} nextToken={data.listPlayers?.nextToken} loadMore={loadMore} />
+      <TransferablesTable
+        players={filteredPlayers?.getPlayersByOrder ? filteredPlayers?.getPlayersByOrder?.items : data.listPlayers?.items}
+        nextToken={filteredPlayers?.getPlayersByOrder ? filteredPlayers?.getPlayersByOrder?.nextToken : data.listPlayers?.nextToken}
+        loadMore={loadMore}
+        onSearch={handleSearch}
+        onSearchChange={handleSearchChange}
+      />
       <PlayerDrawer />
     </>
   )

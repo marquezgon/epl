@@ -20,6 +20,7 @@ import { cache } from './utils/utils';
 const App = () => {
   const cognitoSession = useAuthStore((state) => state.cognitoSession);
   const updateCognitoSession = useAuthStore((state) => state.updateCognitoSession);
+  const updateApolloClientFromStore = useAuthStore((state) => state.updateApolloClient);
   if (!cognitoSession) {
     const currentSession = getCurrentSession();
     updateCognitoSession(currentSession);
@@ -34,9 +35,7 @@ const App = () => {
     }
   }
 
-  
-
-  const client = new ApolloClient({
+  const apolloClient = new ApolloClient({
     link: ApolloLink.from([
       createAuthLink(config),
       createSubscriptionHandshakeLink(config)
@@ -49,8 +48,10 @@ const App = () => {
     }
   });
 
+  updateApolloClientFromStore(apolloClient);
+
   return (
-    <ApolloProvider client={client}>
+    <ApolloProvider client={apolloClient}>
       <ThemeProvider theme={theme}>
         <Router>
           {/* A <Switch> looks through its children <Route>s and

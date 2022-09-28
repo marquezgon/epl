@@ -15,21 +15,25 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
+import SearchField from '../SearchField/SearchField';
 import { getFlag } from '../../utils/utils';
 import { PlayerData } from '../../utils/types';
 import { useModalStore, usePlayerStore } from '../../store/';
 import './TransferablesTable.scss';
 
-dayjs.extend(relativeTime);
+const dayjsConfig = {
+  rounding: Math.floor
+};
+
+dayjs.extend(relativeTime, dayjsConfig);
 dayjs.locale('es');
 
 interface TransferablesTableProps {
   players: Array<PlayerData>;
   loadMore: () => object;
+  onSearch: (searchTerm: string) => Promise<any>;
+  onSearchChange: (searchTerm: string) => void;
   nextToken: string;
 }
 
@@ -62,6 +66,7 @@ interface HeadCell {
   id: keyof PlayerData;
   label: string;
   numeric: boolean;
+  isFlag?: boolean;
 }
 
 const headCells: readonly HeadCell[] = [
@@ -72,8 +77,14 @@ const headCells: readonly HeadCell[] = [
     label: 'Nombre',
   },
   {
-    id: 'position',
+    id: 'rating',
     numeric: true,
+    disablePadding: false,
+    label: 'Rating',
+  },
+  {
+    id: 'position',
+    numeric: false,
     disablePadding: false,
     label: 'Posición',
   },
@@ -84,6 +95,12 @@ const headCells: readonly HeadCell[] = [
     label: 'Precio',
   },
   {
+    id: 'wage',
+    numeric: true,
+    disablePadding: false,
+    label: 'Salario',
+  },
+  {
     id: 'age',
     numeric: true,
     disablePadding: false,
@@ -91,9 +108,10 @@ const headCells: readonly HeadCell[] = [
   },
   {
     id: 'nationality',
-    numeric: true,
+    numeric: false,
     disablePadding: false,
     label: 'Nacionalidad',
+    isFlag: true
   },
 ];
 
@@ -118,7 +136,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
+            align={headCell.isFlag ? 'center' : 'left'}
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -141,32 +159,6 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   );
 }
 
-const EnhancedTableToolbar = () => {
-  return (
-    <Toolbar
-      sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 }
-      }}
-      className='transferables-table__toolbar'
-    >
-      <Typography
-        sx={{ flex: '1 1 100%' }}
-        variant="h6"
-        id="tableTitle"
-        component="div"
-      >
-        Transferibles
-      </Typography>
-      <Tooltip title="Filter list">
-        <IconButton>
-          <FilterListIcon />
-        </IconButton>
-      </Tooltip>
-    </Toolbar>
-  );
-};
-
 export default function EnhancedTable(props: TransferablesTableProps) {
   const selectedPlayer = usePlayerStore((state) => state.selectedPlayer);
   const updateSelectedPlayer = usePlayerStore((state) => state.updateSelectedPlayer);
@@ -176,6 +168,7 @@ export default function EnhancedTable(props: TransferablesTableProps) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const rows = props.players;
+  console.log('rows', rows);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -210,10 +203,28 @@ export default function EnhancedTable(props: TransferablesTableProps) {
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar />
-        <TableContainer>
+        <Toolbar
+          sx={{
+            pl: { sm: 2 },
+            pr: { xs: 1, sm: 1 }
+          }}
+          className='transferables-table__toolbar'
+        >
+          <Typography
+            sx={{ flex: '5' }}
+            variant="h6"
+            id="tableTitle"
+            component="div"
+          >
+            Transferibles
+          </Typography>
+          <Box sx={{ flex: '2', pr: 2 }}>
+            <SearchField onSearch={props.onSearch} onChange={props.onSearchChange} />
+          </Box>
+        </Toolbar>
+        <TableContainer sx={{ height: '550px' }}>
           <Table
-            sx={{ minWidth: 750 }}
+            sx={{ minWidth: '100%' }}
             aria-labelledby='tableTitle'
             size='medium'
           >
@@ -249,8 +260,9 @@ export default function EnhancedTable(props: TransferablesTableProps) {
                       >
                         {row.name}
                       </TableCell>
-                      <TableCell align="right">{row.position}</TableCell>
-                      <TableCell align="right">
+                      <TableCell>{row.rating}</TableCell>
+                      <TableCell>{row.position}</TableCell>
+                      <TableCell>
                         <NumericFormat
                           value={row.price}
                           thousandSeparator=","
@@ -258,8 +270,16 @@ export default function EnhancedTable(props: TransferablesTableProps) {
                           renderText={(value) => `$${value}`}
                         />
                       </TableCell>
-                      <TableCell align="right">{age}</TableCell>
-                      <TableCell align="right">
+                      <TableCell>
+                        <NumericFormat
+                          value={row.wage}
+                          thousandSeparator=","
+                          displayType="text"
+                          renderText={(value) => `$${value}`}
+                        />
+                      </TableCell>
+                      <TableCell>{age}</TableCell>
+                      <TableCell align='center'>
                         <label title={flag?.text}>
                           {flag?.flag}
                         </label>
@@ -280,7 +300,7 @@ export default function EnhancedTable(props: TransferablesTableProps) {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[10]}
           component="div"
           count={-1}
           rowsPerPage={rowsPerPage}

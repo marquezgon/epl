@@ -16,7 +16,8 @@ const GET_TEAM = gql`
       username
       owner_name
       logo,
-      budget
+      budget,
+      id
     }
   }
 `;

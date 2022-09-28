@@ -1,4 +1,5 @@
 import { NumericFormat } from 'react-number-format';
+import { gql, useMutation } from '@apollo/client';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
@@ -13,21 +14,32 @@ import { black, darkGray, mainBlue } from '../../utils/colors';
 import { cache, getFlag } from '../../utils/utils';
 import { UserData } from '../../utils/types';
 
+const BUY_PLAYER = gql`
+  mutation BuyPlayer($playerId: ID!, $teamId: ID!) {
+    buyPlayer(playerId: $playerId, teamId: $teamId) {
+      budget
+    }
+  }
+`;
+
 const PlayerDrawer = () => {
+  const [buyPlayer, { data, loading, error }] = useMutation(BUY_PLAYER);
   const selectedPlayer = usePlayerStore((state) => state.selectedPlayer);
   const showPlayerDrawer = useModalStore((state) => state.showPlayerDrawer);
-  const { budget } = useUserStore((state) => state.user) as UserData;
+  const { budget, id } = useUserStore((state) => state.user) as UserData;
+  console.log(id);
   const updateShowPlayerDrawer = useModalStore((state) => state.updateShowPlayerDrawer);
 
   const toggleDrawer = () => updateShowPlayerDrawer(!showPlayerDrawer);
 
   const country = getFlag(selectedPlayer?.nationality);
 
-  const handlePurchase = () => {
+  const handlePurchase = async () => {
     if (selectedPlayer?.price && selectedPlayer?.transferable == 1) {
 
       const transaction = budget - selectedPlayer.price;
       if (transaction >= 0) {
+        await buyPlayer({ variables: { teamId: id, playerId: selectedPlayer.id } });
         const normalizedId = cache.identify({
           id: selectedPlayer.id,
           __typename: selectedPlayer.__typename
@@ -107,7 +119,7 @@ const PlayerDrawer = () => {
             <Button variant='outlined' onClick={toggleDrawer} color='gray'>
               Cancelar
             </Button>
-            <Button variant='contained' color='secondary' onClick={handlePurchase}>
+            <Button variant='contained' color='secondary' onClick={handlePurchase} disabled={loading}>
               Comprar
             </Button>
           </Stack>
