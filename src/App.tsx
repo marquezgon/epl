@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
   BrowserRouter as Router,
   Routes,
@@ -20,12 +21,9 @@ import { cache } from './utils/utils';
 const App = () => {
   const cognitoSession = useAuthStore((state) => state.cognitoSession);
   const updateCognitoSession = useAuthStore((state) => state.updateCognitoSession);
+  const updateLoadingSession = useAuthStore((state) => state.updateLoadingSession);
   const updateApolloClientFromStore = useAuthStore((state) => state.updateApolloClient);
-  if (!cognitoSession) {
-    const currentSession = getCurrentSession();
-    updateCognitoSession(currentSession);
-  }
-  // updateCognitoSession(currentSession);
+
   const config: any = {
     url: AppSyncConfig.graphqlEndpoint,
     region: AppSyncConfig.region,
@@ -48,7 +46,19 @@ const App = () => {
     }
   });
 
-  updateApolloClientFromStore(apolloClient);
+  useEffect(() => {
+    if (!cognitoSession) {
+      updateLoadingSession(true);
+      const cb = () => { updateLoadingSession(false); };
+      const currentSession = getCurrentSession(cb, cb);
+      
+      updateCognitoSession(currentSession);
+    }
+  }, [cognitoSession]);
+
+  useEffect(() => {
+    updateApolloClientFromStore(apolloClient);
+  }, [apolloClient]);
 
   return (
     <ApolloProvider client={apolloClient}>

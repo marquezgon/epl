@@ -1,8 +1,8 @@
-import { useFormik } from 'formik';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 import { white } from '../../utils/colors';
+import React from 'react';
 
 type Search = (searchTerm: string) => Promise<any>;
 type SearchChange = (searchTerm: string) => void;
@@ -10,18 +10,17 @@ type SearchChange = (searchTerm: string) => void;
 interface SearchFieldProps {
   onSearch: Search;
   onChange?: SearchChange;
+  value: string;
 }
 
 const SearchField = (props: SearchFieldProps) => {
-  const formik = useFormik({
-    initialValues: {
-      searchPlayers: ''
-    },
-    onSubmit: (data) => props.onSearch(data.searchPlayers),
-  });
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    props.onSearch(props.value);
+  }
 
   const handleChange = (e: React.ChangeEvent<any>) => {
-    formik.handleChange(e);
     if (props.onChange) {
       const term = e.target.value
       props.onChange(term);
@@ -29,7 +28,7 @@ const SearchField = (props: SearchFieldProps) => {
   }
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form onSubmit={handleSubmit}>
       <TextField
         sx={{ my: 3 }}
         InputProps={{
@@ -44,7 +43,7 @@ const SearchField = (props: SearchFieldProps) => {
         name='searchPlayers'
         variant='standard'
         placeholder='Buscar'
-        value={formik.values.searchPlayers}
+        value={props.value}
         onChange={handleChange}
       />
     </form>

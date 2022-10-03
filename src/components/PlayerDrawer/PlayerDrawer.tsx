@@ -1,18 +1,18 @@
-import { NumericFormat } from 'react-number-format';
+import React from 'react';
 import { gql, useMutation } from '@apollo/client';
+import classNames from 'classnames';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Chip from '@mui/material/Chip';
 import Drawer from '@mui/material/Drawer';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useModalStore, usePlayerStore, useUserStore } from '../../store';
-import { black, darkGray, mainBlue } from '../../utils/colors';
-import { cache, getFlag } from '../../utils/utils';
-import { UserData } from '../../utils/types';
+import {  mainBlue } from '../../utils/colors';
+import { cache } from '../../utils/utils';
+import { PlayerData, UserData } from '../../utils/types';
+import { marketplaceStatus } from '../../aws-exports';
+import './PlayerDrawer.scss';
+import PlayerCard from '../PlayerCard/PlayerCard';
 
 const BUY_PLAYER = gql`
   mutation BuyPlayer($playerId: ID!, $teamId: ID!) {
@@ -23,31 +23,49 @@ const BUY_PLAYER = gql`
 `;
 
 const PlayerDrawer = () => {
+  const [pdError, setPdError] = React.useState<string | null>(null);
   const [buyPlayer, { data, loading, error }] = useMutation(BUY_PLAYER);
   const selectedPlayer = usePlayerStore((state) => state.selectedPlayer);
   const showPlayerDrawer = useModalStore((state) => state.showPlayerDrawer);
+  const addToast = useModalStore((state) => state.addToast);
+  const updateSearchValue = usePlayerStore((state) => state.updateSearchValue);
+  const searchValue = usePlayerStore((state) => state.searchValue);
   const { budget, id } = useUserStore((state) => state.user) as UserData;
-  console.log(id);
+
   const updateShowPlayerDrawer = useModalStore((state) => state.updateShowPlayerDrawer);
 
   const toggleDrawer = () => updateShowPlayerDrawer(!showPlayerDrawer);
 
-  const country = getFlag(selectedPlayer?.nationality);
-
   const handlePurchase = async () => {
-    if (selectedPlayer?.price && selectedPlayer?.transferable == 1) {
+    if (marketplaceStatus === 'open') {
+      if (selectedPlayer?.price && selectedPlayer?.transferable == 1) {
 
-      const transaction = budget - selectedPlayer.price;
-      if (transaction >= 0) {
-        await buyPlayer({ variables: { teamId: id, playerId: selectedPlayer.id } });
-        const normalizedId = cache.identify({
-          id: selectedPlayer.id,
-          __typename: selectedPlayer.__typename
-        });
-        cache.evict({ id: normalizedId });
-        cache.gc();
-        toggleDrawer();
+        const transaction = budget - selectedPlayer.price;
+        if (transaction >= 0) {
+          try {
+            await buyPlayer({ variables: { teamId: id, playerId: selectedPlayer.id } });
+            addToast({ message: `¡Felicidades, acabas de fichar a ${selectedPlayer.name} en tu equipo!` });
+            const normalizedId = cache.identify({
+              id: selectedPlayer.id,
+              __typename: selectedPlayer.__typename
+            });
+            cache.evict({ id: normalizedId });
+            cache.gc();
+
+            if (searchValue !== '') {
+              updateSearchValue('');
+            }
+
+            toggleDrawer();
+          } catch(e) {
+            console.error(e);
+          }
+        } else {
+          setPdError('No tienes los fondos suficientes para comprar este jugador');
+        }
       }
+    } else {
+      addToast({ message: 'El mercado de transferencias está cerrado por el momento.', type: 'error' });
     }
   }
 
@@ -66,52 +84,7 @@ const PlayerDrawer = () => {
         <Box sx={{ px: 3, pt: 4, height: '100%' }}>
           <Stack direction='column' justifyContent='center' alignItems='center'>
             <Typography variant='h5' sx={{ mb: 2 }}>FICHA DEL JUGADOR</Typography>
-            <Card sx={{ maxWidth: 345, position: 'relative', width: '100%' }}>
-              {country && (
-                <Box
-                  component='label'
-                  sx={{ pl: .5, fontSize: '2rem', position: 'absolute', right: '20px', top: '14px' }}
-                  title={country.text}>{country.flag}
-                </Box>
-              )}
-              <CardMedia
-                component='img'
-                image={selectedPlayer?.photo}
-                alt={selectedPlayer?.name}
-                sx={{ display: 'block', marginLeft: 'auto', marginRight: 'auto', width: '90%', pt: 2 }}
-              />
-              <CardContent sx={{ pt: 1, pb: 1.5 }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <Typography gutterBottom variant='h5' sx={{ mb: 0, lineHeight: '1.1rem', color: black, pr: 1 }}>
-                    {selectedPlayer?.name}
-                  </Typography>
-                  <Chip label={
-                    <Typography gutterBottom variant='subtitle1' sx={{ color: darkGray, fontWeight: '600', mb: 0 }}>
-                      {selectedPlayer?.position}
-                    </Typography>
-                  } />
-                </Box>
-                <NumericFormat
-                  value={selectedPlayer?.price}
-                  thousandSeparator=','
-                  displayType='text'
-                  renderText={(value) => (
-                    <Typography gutterBottom variant='subtitle1' sx={{ color: darkGray, fontSize: '1.1rem', fontWeight: '600' }}>
-                      {`$${value}`}
-                    </Typography>
-                  )}
-                />
-                <Typography variant='body2' color='text.secondary'>
-                  <span style={{ fontWeight: '500' }}>Nombre Completo: </span>{selectedPlayer?.fullName}
-                </Typography>
-                <Typography variant='body2' color='text.secondary'>
-                  <span style={{ fontWeight: '500' }}>Posición: </span>{selectedPlayer?.position}
-                </Typography>
-                <Typography variant='body2' color='text.secondary'>
-                  <span style={{ fontWeight: '500' }}>Edad: </span>{selectedPlayer?.age}
-                </Typography>
-              </CardContent>
-            </Card>
+            <PlayerCard player={selectedPlayer as PlayerData} />
           </Stack>
         </Box>
         <Box sx={{ mx: 5 }}>
@@ -119,7 +92,13 @@ const PlayerDrawer = () => {
             <Button variant='outlined' onClick={toggleDrawer} color='gray'>
               Cancelar
             </Button>
-            <Button variant='contained' color='secondary' onClick={handlePurchase} disabled={loading}>
+            <Button
+              className={classNames({ 'player-drawer__confirm-btn--disabled': loading })}
+              variant='contained'
+              color='secondary'
+              onClick={handlePurchase}
+              disabled={loading}
+            >
               Comprar
             </Button>
           </Stack>

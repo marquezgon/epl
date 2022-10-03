@@ -11,7 +11,9 @@ import {
   white,
   lightGray,
   darkGray,
-  mainGray
+  mainGray,
+  mainGreen,
+  darkGreen
 } from './colors';
 
 const themeConfig = {
@@ -34,6 +36,17 @@ const themeConfig = {
       styleOverrides: {
         root: {
           color: white
+        }
+      }
+    },
+    MuiAlert: {
+      styleOverrides: {
+        root: {
+          fontSize: '.95rem'
+        },
+        standardSuccess: {
+          backgroundColor: mainGreen,
+          color: darkGreen
         }
       }
     }

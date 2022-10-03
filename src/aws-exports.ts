@@ -1,3 +1,5 @@
+import { MarketplaceStatus } from './utils/types';
+
 const awsConfig = {
   UserPoolId: process.env.REACT_APP_AWS_COGNITO_POOL_ID || '',
   ClientId: process.env.REACT_APP_AWS_COGNITO_CLIENT_ID || '',
@@ -12,5 +14,7 @@ export const AppSyncConfig = {
   region: Region,
   authenticationType: process.env.REACT_APP_AWS_AUTHENTICATION_TYPE || ''
 }
+
+export const marketplaceStatus: MarketplaceStatus = process.env.REACT_APP_MARKETPLACE_STATUS === 'open' ? process.env.REACT_APP_MARKETPLACE_STATUS : 'closed';
 
 export default awsConfig;

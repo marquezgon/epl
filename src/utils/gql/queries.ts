@@ -11,12 +11,12 @@ export const GET_PLAYERS = gql`
         price
         age: dob
         nationality
-        photo
         fullName: full_name
         transferable
         ownedBy: owned_by
         wage
         rating: overall_rating
+        futdbId
       }
     }
   }
@@ -33,12 +33,12 @@ export const SEARCH_PLAYERS = gql`
         price
         age: dob
         nationality
-        photo
         fullName: full_name
         transferable
         ownedBy: owned_by
         wage
         rating: overall_rating
+        futdbId
       }
     }
   }

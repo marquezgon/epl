@@ -1,5 +1,5 @@
 import { CognitoUser, CognitoUserPool, CognitoUserSession } from 'amazon-cognito-identity-js';
-import awsExports from './aws-exports';
+import awsExports, { AppSyncConfig } from './aws-exports';
 
 type Callback = () => void;
 
@@ -29,3 +29,29 @@ export const getCurrentSession = (onFailure?: Callback, onSuccess?: Callback) : 
 
   return currentSession;
 }
+
+export const getCognitoSession = () => {
+  return new Promise((resolve, reject) => {
+    const cognitoUser = getCurrentUser();
+    if (!cognitoUser) {
+      reject(new Error('Failure getting Cognito user. Are you logged in?'));
+      return;
+    }
+    cognitoUser.getSession((err: Error | null, result: CognitoUserSession | null) => {
+      if (err || !result) {
+        reject(new Error('Failure getting Cognito session: ' + err))
+        return
+      }
+ 
+      const session = {
+        url: AppSyncConfig.graphqlEndpoint,
+        region: AppSyncConfig.region,
+        auth: {
+          type: AppSyncConfig.authenticationType,
+          jwtToken: result.getIdToken().getJwtToken()
+        }};
+        
+      resolve(session);
+    })
+  })
+};

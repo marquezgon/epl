@@ -1,0 +1,8 @@
+.player-drawer {
+  &__confirm-btn {
+    &--disabled {
+      background-color: rgba(205, 166, 60, .4) !important;
+      color: #bbb !important;
+    }
+  }
+}

@@ -12,33 +12,133 @@ interface CountryInfo {
 }
 
 export const countryList = {
+  algeria: {
+    flag: '\ud83c\udde9\ud83c\uddff',
+    text: 'Argelia'
+  },
+  argentina: {
+    flag: '\ud83c\udde6\ud83c\uddf7',
+    text: 'Argentina'
+  },
+  australia: {
+    flag: '\ud83c\udde6\ud83c\uddfa',
+    text: 'Australia'
+  },
+  belgium: {
+    flag: '\ud83c\udde7\ud83c\uddea',
+    text: 'Bélgica'
+  },
   brazil: {
     flag: '\ud83c\udde7\ud83c\uddf7',
     text: 'Brasil'
+  },
+  colombia: {
+    flag: '\ud83c\udde8\ud83c\uddf4',
+    text: 'Colombia'
+  },
+  croatia: {
+    flag: '\ud83c\udded\ud83c\uddf7',
+    text: 'Croacia'
+  },
+  'czech republic': {
+    flag: '\ud83c\udde8\ud83c\uddff',
+    text: 'Républica Checa'
+  },
+  egypt: {
+    flag: '\ud83c\uddea\ud83c\uddec',
+    text: 'Egipto'
   },
   england: {
     flag: '\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f',
     text: 'Inglaterra'
   },
+  france: {
+    flag: '\ud83c\uddeb\ud83c\uddf7',
+    text: 'Francia'
+  },
+  gabon: {
+    flag: '\ud83c\uddec\ud83c\udde6',
+    text: 'Gabón'
+  },
   germany: {
     flag: '\ud83c\udde9\ud83c\uddea',
     text: 'Alemania'
+  },
+  'republic of ireland': {
+    flag: '\ud83c\uddee\ud83c\uddea',
+    text: 'Irlanda'
+  },
+  israel: {
+    flag: '\ud83c\uddee\ud83c\uddf1',
+    text: 'Israel'
+  },
+  italy: {
+    flag: '\ud83c\uddee\ud83c\uddf9',
+    text: 'Italia'
+  },
+  japan: {
+    flag: '\ud83c\uddef\ud83c\uddf5',
+    text: 'Japón'
+  },
+  mali: {
+    flag: '\ud83c\uddf2\ud83c\uddf1',
+    text: 'Malí'
   },
   mexico: {
     flag: '	\ud83c\uddf2\ud83c\uddfd',
     text: 'México'
   },
+  montenegro: {
+    flag: '\ud83c\uddf2\ud83c\uddea',
+    text: 'Montenegro'
+  },
+  morocco: {
+    flag: '\ud83c\uddf2\ud83c\udde6',
+    text: 'Marruecos'
+  },
   netherlands: {
     flag: '\ud83c\uddf3\ud83c\uddf1',
     text: 'Holanda'
+  },
+  nigeria: {
+    flag: '\ud83c\uddf3\ud83c\uddec',
+    text: 'Nigeria'
+  },
+  norway: {
+    flag: '\ud83c\uddf3\ud83c\uddf4',
+    text: 'Noruega'
+  },
+  paraguay: {
+    flag: '\ud83c\uddf5\ud83c\uddfe',
+    text: 'Paraguay'
+  },
+  peru: {
+    flag: '\ud83c\uddf5\ud83c\uddea',
+    text: 'Perú'
   },
   portugal: {
     flag: '\ud83c\uddf5\ud83c\uddf9',
     text: 'Portugal'
   },
+  scotland: {
+    flag: '\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc73\udb40\udc63\udb40\udc74\udb40\udc7f',
+    text: 'Escocia',
+  },
+  senegal: {
+    flag: '\ud83c\uddf8\ud83c\uddf3',
+    text: 'Senegal'
+  },
+  serbia: {
+    flag: '\ud83c\uddf7\ud83c\uddf8',
+    text: 'Serbia'
+  },
   spain: {
     flag: '\ud83c\uddea\ud83c\uddf8',
     text: 'España'
+  },
+  'south africa': {
+    flag: '\ud83c\uddff\ud83c\udde6',
+    text: 'Sudáfrica'
   },
   switzerland: {
     flag: '\ud83c\udde8\ud83c\udded',
@@ -47,6 +147,18 @@ export const countryList = {
   ukraine: {
     flag: '\ud83c\uddfa\ud83c\udde6',
     text: 'Ucrania'
+  },
+  'united states': {
+    flag: '\ud83c\uddfa\ud83c\uddf8',
+    text: 'Estados Unidos'
+  },
+  uruguay: {
+    flag: '\ud83c\uddfa\ud83c\uddfe',
+    text: 'Uruguay'
+  },
+  wales: {
+    flag: '\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc77\udb40\udc6c\udb40\udc73\udb40\udc7f',
+    text: 'Gales'
   }
 };
 
@@ -72,7 +184,7 @@ export const cache = new InMemoryCache({
                 ...incoming
               };
             }
-            console.log(incoming);
+
             return incoming;
           },
         }
@@ -80,3 +192,12 @@ export const cache = new InMemoryCache({
     }
   }
 });
+
+export function capitalizeFirstLetter(word: string) {
+  const arr = word.split(' ');
+  for (let i = 0; i < arr.length; i++) {
+    arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
+  }
+
+  return arr.join(' ');
+}

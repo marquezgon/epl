@@ -4,15 +4,15 @@ import { PlayerData } from '../utils/types';
 interface PlayerState {
   selectedPlayer: PlayerData | null,
   updateSelectedPlayer: (selectedPlayer: PlayerData | null) => void,
-  isSearch: boolean,
-  updateIsSearch: (isSearch: boolean) => void,
+  searchValue: string;
+  updateSearchValue: (searchValue: string) => void,
 }
 
 const usePlayerStore = create<PlayerState>()((set) => ({
   selectedPlayer: null,
   updateSelectedPlayer: (selectedPlayer) => set(() => ({ selectedPlayer })),
-  isSearch: false,
-  updateIsSearch: (isSearch: boolean) => set(() => ({ isSearch })),
+  searchValue: '',
+  updateSearchValue: (searchValue: string) => set(() => ({ searchValue })),
 }))
 
 export default usePlayerStore;

@@ -1,4 +1,7 @@
 import { QueryResult, OperationVariables } from '@apollo/client';
+import { AlertColor } from '@mui/material/Alert';
+
+export type MarketplaceStatus = 'open' | 'closed';
 
 export interface UserData {
   budget: number;
@@ -9,8 +12,21 @@ export interface UserData {
   id: string;
 }
 
+interface ToastPosition {
+  vertical: 'top' | 'bottom';
+  horizontal: 'left' | 'center' | 'right';
+}
+
+export interface ToastData {
+  message: string;
+  duration?: number;
+  position?: ToastPosition;
+  type?: AlertColor;
+}
+
 export interface PlayerData {
   id: string;
+  futdbId: string;
   transferable: number;
   name: string;
   fullName: string;
@@ -18,7 +34,6 @@ export interface PlayerData {
   price: number;
   age: string;
   nationality: string;
-  photo: string;
   ownedBy: string;
   wage: number;
   rating: number;

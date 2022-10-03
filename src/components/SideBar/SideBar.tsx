@@ -4,11 +4,12 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import ScoreboardIcon from '@mui/icons-material/Scoreboard';
+import StadiumIcon from '@mui/icons-material/Stadium';
 import PeopleIcon from '@mui/icons-material/People';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import { Typography } from '@mui/material';
 import { mainBlue, white } from '../../utils/colors';
 import LinkButton from '../../components/LinkButton/LinkButton';
@@ -25,6 +26,7 @@ const tournamentPages = [
 
 const marketPages = [
   { text: 'Transferibles', href: '/market/listings', icon: <AttachMoneyIcon /> },
+  { text: 'Estadios', href: '/market/stadiums', icon: <StadiumIcon /> },
 ];
 
 const SideBar = () => {

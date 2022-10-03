@@ -1,19 +1,36 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import TransferablesTable from '../../components/TransferablesTable/TransferablesTable';
 import PlayerDrawer from '../../components/PlayerDrawer/PlayerDrawer';
 import { GET_PLAYERS, SEARCH_PLAYERS } from '../../utils/gql/queries';
-import { useAuthStore } from '../../store/';
+import { useAuthStore, usePlayerStore } from '../../store/';
+import { capitalizeFirstLetter } from '../../utils/utils';
 
 
 const Transferables = () => {
   const [filteredPlayers, setFilteredPlayers] = React.useState<any>({});
+  const updateSearchValue = usePlayerStore((state) => state.updateSearchValue);
+  const searchValue = usePlayerStore((state) => state.searchValue);
   const apolloClient = useAuthStore((state) => state.apolloClient);
   const { loading, error, data, fetchMore } = useQuery(GET_PLAYERS, { variables: { transferable: 1, limit: 10 } });
 
+  useEffect(() => {
+    if (searchValue === '' && filteredPlayers?.getPlayersByOrder) {
+      setFilteredPlayers({});
+    }
+  }, [searchValue]);
+
   const handleSearch = async (searchTerm: string) => {
-    console.log(searchTerm);
-    const filter = { nickname: { contains: searchTerm }, transferable: { eq: 1 } };
+    let filter;
+    let capitalizedTerm;
+    const searchTermToNumber = Number(searchTerm);
+    if (isNaN(searchTermToNumber)) {
+      capitalizedTerm = capitalizeFirstLetter(searchTerm);
+      filter = { nickname: { contains: capitalizedTerm }, transferable: { eq: 1 } };
+    } else {
+      // eslint-disable-next-line camelcase
+      filter = { overall_rating: { eq: searchTermToNumber }, transferable: { eq: 1 } };
+    }
     try {
       const result =  await apolloClient.query({
         query: SEARCH_PLAYERS,
@@ -26,9 +43,7 @@ const Transferables = () => {
   }
 
   const handleSearchChange = (searchTerm: string) => {
-    if (searchTerm === '') {
-      setFilteredPlayers({});
-    }
+    updateSearchValue(searchTerm);
   }
 
   const loadMore = () => fetchMore({

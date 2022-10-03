@@ -161,6 +161,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 export default function EnhancedTable(props: TransferablesTableProps) {
   const selectedPlayer = usePlayerStore((state) => state.selectedPlayer);
+  const searchValue = usePlayerStore((state) => state.searchValue);
   const updateSelectedPlayer = usePlayerStore((state) => state.updateSelectedPlayer);
   const updateShowPlayerDrawer = useModalStore((state) => state.updateShowPlayerDrawer);
   const [order, setOrder] = React.useState<Order>('asc');
@@ -168,7 +169,7 @@ export default function EnhancedTable(props: TransferablesTableProps) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const rows = props.players;
-  console.log('rows', rows);
+  console.log(rows);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -219,7 +220,7 @@ export default function EnhancedTable(props: TransferablesTableProps) {
             Transferibles
           </Typography>
           <Box sx={{ flex: '2', pr: 2 }}>
-            <SearchField onSearch={props.onSearch} onChange={props.onSearchChange} />
+            <SearchField onSearch={props.onSearch} onChange={props.onSearchChange} value={searchValue} />
           </Box>
         </Toolbar>
         <TableContainer sx={{ height: '550px' }}>

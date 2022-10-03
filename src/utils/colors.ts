@@ -24,3 +24,13 @@ export const darkBlue = '#OE121B';
 export const lightGray = '#fafafa';
 export const mainGray = '#aaa';
 export const darkGray = '#555555';
+
+// Green
+export const mainGreen = '#d1efd1';
+export const darkGreen = '#1d4415';
+
+// Bronze
+export const bronze = '#7a412ddd';
+
+// Gold
+export const gold = '#dfc16d';
