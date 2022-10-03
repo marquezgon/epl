@@ -32,6 +32,7 @@ dayjs.locale('es');
 interface TransferablesTableProps {
   players: Array<PlayerData>;
   loadMore: () => object;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onSearch: (searchTerm: string) => Promise<any>;
   onSearchChange: (searchTerm: string) => void;
   nextToken: string;
@@ -49,6 +50,7 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
 
 type Order = 'asc' | 'desc';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getComparator<Key extends keyof any>(
   order: Order,
   orderBy: Key,

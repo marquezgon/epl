@@ -1,4 +1,4 @@
-import { Navigate, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { gql, useQuery } from '@apollo/client';
 import MuiAlert from '@mui/material/Alert';
 import Box from '@mui/material/Box';

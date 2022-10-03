@@ -24,6 +24,7 @@ const App = () => {
   const updateLoadingSession = useAuthStore((state) => state.updateLoadingSession);
   const updateApolloClientFromStore = useAuthStore((state) => state.updateApolloClient);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const config: any = {
     url: AppSyncConfig.graphqlEndpoint,
     region: AppSyncConfig.region,

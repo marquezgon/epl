@@ -8,7 +8,9 @@ interface AuthState {
   updateCognitoUser: (user: CognitoUser) => void;
   cognitoSession: CognitoUserSession | null;
   updateCognitoSession: (user: CognitoUserSession | null) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   apolloClient: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   updateApolloClient: (apolloClient: any | null) => void;
   loadingSession: boolean;
   updateLoadingSession: (loadingSession: boolean) => void;
@@ -20,6 +22,7 @@ const useAuthStore = create<AuthState>()((set) => ({
   cognitoSession: null,
   updateCognitoSession: (cognitoSession) => set(() => ({ cognitoSession })),
   apolloClient: null,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   updateApolloClient: (apolloClient: any) => set(() => ({ apolloClient })),
   loadingSession: true,
   updateLoadingSession: (loadingSession: boolean) => set(() => ({ loadingSession })),

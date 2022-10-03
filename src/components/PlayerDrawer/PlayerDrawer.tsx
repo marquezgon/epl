@@ -24,7 +24,7 @@ const BUY_PLAYER = gql`
 
 const PlayerDrawer = () => {
   const [pdError, setPdError] = React.useState<string | null>(null);
-  const [buyPlayer, { data, loading, error }] = useMutation(BUY_PLAYER);
+  const [buyPlayer, { loading }] = useMutation(BUY_PLAYER);
   const selectedPlayer = usePlayerStore((state) => state.selectedPlayer);
   const showPlayerDrawer = useModalStore((state) => state.showPlayerDrawer);
   const addToast = useModalStore((state) => state.addToast);
@@ -35,7 +35,7 @@ const PlayerDrawer = () => {
   const updateShowPlayerDrawer = useModalStore((state) => state.updateShowPlayerDrawer);
 
   const toggleDrawer = () => updateShowPlayerDrawer(!showPlayerDrawer);
-
+  console.log(pdError);
   const handlePurchase = async () => {
     if (marketplaceStatus === 'open') {
       if (selectedPlayer?.price && selectedPlayer?.transferable == 1) {

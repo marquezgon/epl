@@ -8,6 +8,7 @@ import { capitalizeFirstLetter } from '../../utils/utils';
 
 
 const Transferables = () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [filteredPlayers, setFilteredPlayers] = React.useState<any>({});
   const updateSearchValue = usePlayerStore((state) => state.updateSearchValue);
   const searchValue = usePlayerStore((state) => state.searchValue);

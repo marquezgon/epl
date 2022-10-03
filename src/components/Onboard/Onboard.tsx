@@ -30,6 +30,7 @@ interface FormValues {
   fullName: string;
   teamName: string;
   psUsername: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   logo: any;
 }
 

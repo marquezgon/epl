@@ -4,6 +4,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { white } from '../../utils/colors';
 import React from 'react';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Search = (searchTerm: string) => Promise<any>;
 type SearchChange = (searchTerm: string) => void;
 
@@ -20,6 +21,7 @@ const SearchField = (props: SearchFieldProps) => {
     props.onSearch(props.value);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleChange = (e: React.ChangeEvent<any>) => {
     if (props.onChange) {
       const term = e.target.value

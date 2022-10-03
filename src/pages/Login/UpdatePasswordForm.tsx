@@ -55,11 +55,13 @@ const UpdatePasswordForm = () => {
 
   function handleSubmit(values: FormValues) {
     cognitoUser?.completeNewPasswordChallenge(values.password, currentUser, {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       onSuccess: (result: any) => {
         console.log(result);
         updateShowOnboarding(true);
         navigate('/dashboard');
       },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       onFailure: (err: any) => {
         console.log(err);
       }
