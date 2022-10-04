@@ -1,12 +1,22 @@
-import React from 'react';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import LinkButton from '../../components/LinkButton/LinkButton';
 import './Landing.scss';
+import { getCurrentSession } from '../../auth';
 
 function Landing() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const onError = () => console.log('Landing');
+    const onSuccess = () => navigate('/market/listings');
+    getCurrentSession(onError, onSuccess);
+  }, []);
+
   return (
     <section className='landing'>
       <Container fixed>
