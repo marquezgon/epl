@@ -1,13 +1,14 @@
-import React from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import { useLoginStore } from '../../store';
 import LoginForm from './LoginForm';
 import UpdatePasswordForm from './UpdatePasswordForm';
+import Onboard from '../../components/Onboard/Onboard';
 import './Login.scss';
 
 const Login = () => {
   const status = useLoginStore((state) => state.status);
+
   return (
     <section className='login'>
       <Box sx={{ my: 8 }}>
@@ -25,6 +26,7 @@ const Login = () => {
       <Box
         className='login__img-container'
       />
+      <Onboard />
     </section>
   );
 }

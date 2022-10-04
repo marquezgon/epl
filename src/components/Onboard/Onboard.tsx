@@ -1,23 +1,24 @@
-import { useState } from 'react';
+// import { useState } from 'react';
 import { useFormik } from 'formik';
+import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { gql, useMutation } from '@apollo/client';
-import { PutObjectCommand } from '@aws-sdk/client-s3';
+// import { PutObjectCommand } from '@aws-sdk/client-s3';
 import Backdrop from '@mui/material/Backdrop';
-import Box from '@mui/material/Box';
+// import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import FormLabel from '@mui/material/FormLabel';
-import FormHelperText from '@mui/material/FormHelperText';
+// import FormLabel from '@mui/material/FormLabel';
+// import FormHelperText from '@mui/material/FormHelperText';
 import Grid from '@mui/material/Grid';
-import IconButton from '@mui/material/IconButton';
+// import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
-import PhotoCamera from '@mui/icons-material/PhotoCamera';
+// import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { mainBlue, white } from '../../utils/colors';
-import s3Client from '../../helpers/s3Client';
+// import s3Client from '../../helpers/s3Client';
 import { getCurrentUser } from '../../auth';
-import { useModalStore } from '../../store';
+import { useAuthStore, useModalStore } from '../../store';
 import './Onboard.scss';
 
 const loginSchema = Yup.object({
@@ -35,19 +36,21 @@ interface FormValues {
 }
 
 const ADD_TEAM = gql`
-  mutation CreateTeam($ownerName: String!, $name: String!, $psUsername: String!, $logo: String, $username: String!) {
-    createTeam(input: {owner_name: $ownerName, name: $name, ps_username: $psUsername, logo: $logo, username: $username}) {
+  mutation CreateTeam($ownerName: String!, $name: String!, $psUsername: String!, $logo: String, $username: String!, $budget: Float!) {
+    createTeam(input: {owner_name: $ownerName, name: $name, ps_username: $psUsername, logo: $logo, username: $username, budget: $budget}) {
       id
       name
     }
   }
 `;
 
-type File = string | ArrayBuffer | null;
+// type File = string | ArrayBuffer | null;
 
 const Onboard = () => {
-  const [logoPreview, setLogoPreview] = useState<File>(null);
+  // const [logoPreview, setLogoPreview] = useState<File>(null);
   const [addTeam] = useMutation(ADD_TEAM);
+  const cognitoSession = useAuthStore((state) => state.cognitoSession);
+  const navigate = useNavigate();
   const updateShowOnboarding = useModalStore((state) => state.updateShowOnboarding);
   const showOnboarding = useModalStore((state) => state.showOnboarding);
 
@@ -55,21 +58,29 @@ const Onboard = () => {
 
   const handleSubmit = async (values: FormValues) => {
     const username = currentUser?.getUsername()
-    if (values.logo && username) {
-      const fileExt = values.logo.name.split('.').pop();
-      const logoStr = `${username}/logo.${fileExt}`;
+    if (username) {
+      // const fileExt = values.logo.name.split('.').pop();
+      // const logoStr = `${username}/logo.${fileExt}`;
 
-      const uploadParams = {
-        Bucket: 'epremierleague-team-owner-images',
-        // Add the required 'Key' parameter using the 'path' module.
-        Key: `uploads/${logoStr}`,
-        // Add the required 'Body' parameter
-        Body: values.logo,
-      };
+      // const uploadParams = {
+      //   Bucket: 'epremierleague-team-owner-images',
+      //   // Add the required 'Key' parameter using the 'path' module.
+      //   Key: `uploads/${logoStr}`,
+      //   // Add the required 'Body' parameter
+      //   Body: values.logo,
+      // };
       try {
-        await s3Client.send(new PutObjectCommand(uploadParams));
-        addTeam({ variables: { logo: logoStr, name: values.teamName, ownerName: values.fullName, psUsername: values.psUsername, username  } });
-        updateShowOnboarding(false);
+        console.log('in');
+        console.log(cognitoSession);
+        // console.log(sess)
+        // await s3Client.send(new PutObjectCommand(uploadParams));
+        addTeam({
+          onCompleted: () => {
+            updateShowOnboarding(false);
+            navigate('/dashboard');
+          },
+          variables: { logo: '', name: values.teamName, ownerName: values.fullName, psUsername: values.psUsername, username, budget: 50000000  }
+        });
       } catch (err) {
         console.log('Error', err);
       }
@@ -133,7 +144,7 @@ const Onboard = () => {
             error={formik.touched.psUsername && Boolean(formik.errors.psUsername)}
             helperText={formik.touched.psUsername && formik.errors.psUsername}
           />
-          <Box sx={{ px: 1.8, mt: 1 }}>
+          {/* <Box sx={{ px: 1.8, mt: 1 }}>
             <Box>
               <FormLabel>Logo de tu equipo</FormLabel>
             </Box>
@@ -164,7 +175,7 @@ const Onboard = () => {
                 <FormHelperText error>{formik.touched.logo && formik.errors.logo}</FormHelperText>
               </Box>
             }
-          </Box>
+          </Box> */}
 
           <Grid container display='flex' justifyContent='center' sx={{ mt: 3 }}>
             <Button type="submit" disabled={formik.isSubmitting} variant='contained' size='large'>

@@ -84,6 +84,7 @@ const LoginForm = () => {
       },
       onFailure: (err) => {
         console.log(err);
+        formik.setSubmitting(false);
       },
       newPasswordRequired: (userAttributes) => {
         delete userAttributes.email_verified;
@@ -143,7 +144,6 @@ const LoginForm = () => {
           error={formik.touched.password && Boolean(formik.errors.password)}
           helperText={formik.touched.password && formik.errors.password}
         />
-
         <Grid container display='flex' justifyContent='center' sx={{ mt: 3 }}>
           <Button
             type="submit"

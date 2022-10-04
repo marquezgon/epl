@@ -49,6 +49,7 @@ const App = () => {
   });
 
   useEffect(() => {
+    console.log(cognitoSession);
     if (!cognitoSession) {
       updateLoadingSession(true);
       const cb = () => { updateLoadingSession(false); };
@@ -69,6 +70,7 @@ const App = () => {
           {/* A <Switch> looks through its children <Route>s and
               renders the first one that matches the current URL. */}
           <Routes>
+            <Route path='dashboard' element={<ProtectedLayout />} />
             <Route path='my-team' element={<ProtectedLayout />}>
               <Route path='' element={<MyTeam />} />
             </Route>

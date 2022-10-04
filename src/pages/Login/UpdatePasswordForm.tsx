@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import Button from '@mui/material/Button';
@@ -32,9 +31,9 @@ interface FormValues {
 // Aside: You may see InjectedFormikProps<OtherProps, FormValues> instead of what comes below in older code.. InjectedFormikProps was artifact of when Formik only exported a HoC. It is also less flexible as it MUST wrap all props (it passes them through).
 const UpdatePasswordForm = () => {
   // hooks
+  const updateCognitoSession = useAuthStore((state) => state.updateCognitoSession);
   const cognitoUser = useAuthStore((state) => state.cognitoUser);
   const currentUser = useUserStore((state) => state.user);
-  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       password: '',
@@ -55,11 +54,9 @@ const UpdatePasswordForm = () => {
 
   function handleSubmit(values: FormValues) {
     cognitoUser?.completeNewPasswordChallenge(values.password, currentUser, {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      onSuccess: (result: any) => {
-        console.log(result);
+      onSuccess: (result) => {
+        updateCognitoSession(result);
         updateShowOnboarding(true);
-        navigate('/dashboard');
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       onFailure: (err: any) => {

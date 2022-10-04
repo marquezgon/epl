@@ -5,7 +5,6 @@ import Box from '@mui/material/Box';
 import Snackbar from '@mui/material/Snackbar';
 import Stack from '@mui/material/Stack';
 import SideBar from '../SideBar/SideBar';
-import Onboard from '../Onboard/Onboard';
 import TopBar from '../TopBar/TopBar';
 import { getCurrentUser } from '../../auth';
 import { useAuthStore, useModalStore, useUserStore } from '../../store';
@@ -40,6 +39,7 @@ export const ProtectedLayout = () => {
   // }
 
   const currentUser = getCurrentUser();
+  
   const getTeam = useQuery(GET_TEAM, { variables: { username: currentUser?.getUsername() } });
 
   if (loadingSession) {
@@ -70,7 +70,6 @@ export const ProtectedLayout = () => {
       </Stack>
       <TopBar />
       <Box sx={{ display: 'flex', height: 'calc(100vh - 70px)', backgroundColor: lightGray }}>
-        <Onboard />
         <SideBar />
         <Box sx={{ m: 1.5, width: '100%' }}>
           <Outlet />
