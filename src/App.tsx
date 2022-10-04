@@ -12,6 +12,7 @@ import ProtectedLayout from './components/ProtectedLayout/ProtectedLayout';
 import Transferables from './pages/Transferables/Transferables';
 import Landing from './pages/Landing/Landing';
 import Login from './pages/Login/Login';
+import MyTeam from './pages/MyTeam/MyTeam';
 import theme from './theme';
 import { AppSyncConfig } from './aws-exports';
 import { getCurrentSession } from './auth';
@@ -68,7 +69,9 @@ const App = () => {
           {/* A <Switch> looks through its children <Route>s and
               renders the first one that matches the current URL. */}
           <Routes>
-            <Route path='dashboard' element={<ProtectedLayout />} />
+            <Route path='my-team' element={<ProtectedLayout />}>
+              <Route path='' element={<MyTeam />} />
+            </Route>
             <Route path='market' element={<ProtectedLayout />}>
               <Route path='listings' element={<Transferables />} />
             </Route>

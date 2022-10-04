@@ -21,7 +21,7 @@ export const mainBlue = '#131825';
 export const darkBlue = '#OE121B';
 
 // Gray
-export const lightGray = '#fafafa';
+export const lightGray = '#eee';
 export const mainGray = '#aaa';
 export const darkGray = '#555555';
 

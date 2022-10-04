@@ -43,3 +43,22 @@ export const SEARCH_PLAYERS = gql`
     }
   }
 `;
+
+export const GET_MY_TEAM = gql`
+  query GetMyTeam($teamId: ID!) {
+    getPlayersByTeam(id: $teamId) {
+      id
+      name: nickname
+      position
+      price
+      age: dob
+      nationality
+      fullName: full_name
+      transferable
+      ownedBy: owned_by
+      wage
+      rating: overall_rating
+      futdbId
+    }
+  }
+`;

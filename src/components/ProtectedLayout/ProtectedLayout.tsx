@@ -42,21 +42,15 @@ export const ProtectedLayout = () => {
   const currentUser = getCurrentUser();
   const getTeam = useQuery(GET_TEAM, { variables: { username: currentUser?.getUsername() } });
 
-  console.log(loadingSession);
-
   if (loadingSession) {
-    console.log('2');
     return <Loading />;
   }
   
   updateUser(getTeam.data?.getTeamByUsername);
   
   if (getTeam.loading) {
-    console.log('3');
     return <Loading />;
   }
-
-  console.log('1');
 
   return (
     <>

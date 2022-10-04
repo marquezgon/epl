@@ -140,6 +140,10 @@ export const countryList = {
     flag: '\ud83c\uddff\ud83c\udde6',
     text: 'Sudáfrica'
   },
+  sweden: {
+    flag: '\ud83c\uddf8\ud83c\uddea',
+    text: 'Sweden'
+  },
   switzerland: {
     flag: '\ud83c\udde8\ud83c\udded',
     text: 'Suiza'
