@@ -21,7 +21,7 @@ const tournamentPages = [
   { text: 'Clasificación', href: '/standings', icon: <FormatListNumberedIcon /> },
   { text: 'Resultados', href: '/results', icon: <ScoreboardIcon /> },
   { text: 'Calendario', href: '/calendar', icon: <CalendarMonthIcon /> },
-  { text: 'Mi Equipo', href: '/my-team', icon: <PeopleIcon /> }
+  { text: 'Equipos', href: '/teams', icon: <PeopleIcon /> }
 ];
 
 const marketPages = [

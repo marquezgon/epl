@@ -22,6 +22,17 @@ export const GET_PLAYERS = gql`
   }
 `;
 
+export const LIST_TEAMS = gql`
+  query ListTeams($nextToken: String, $limit: Int, $filter: TableTeamFilterInput) {
+    listTeams(limit: $limit, nextToken: $nextToken, filter: $filter) {
+      items {
+        id
+        name
+      }
+    }
+  }
+`;
+
 export const SEARCH_PLAYERS = gql`
   query SearchPlayers($nextToken: String, $limit: Int, $filter: TablePlayerFilterInput) {
     getPlayersByOrder(limit: $limit, nextToken: $nextToken, filter: $filter) {
