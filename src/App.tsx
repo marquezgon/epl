@@ -49,7 +49,6 @@ const App = () => {
   });
 
   useEffect(() => {
-    console.log(cognitoSession);
     if (!cognitoSession) {
       updateLoadingSession(true);
       const cb = () => { updateLoadingSession(false); };

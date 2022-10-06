@@ -46,6 +46,7 @@ const Transferables = () => {
   const handleSearchChange = (searchTerm: string) => {
     updateSearchValue(searchTerm);
   }
+  
 
   const loadMore = () => fetchMore({
     query: GET_PLAYERS,

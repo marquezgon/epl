@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { NumericFormat } from 'react-number-format';
+import shallow from 'zustand/shallow'
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -15,6 +17,7 @@ import logoImg from '../../img/logo@2x.png';
 import { getCurrentSession, getCurrentUser } from '../../auth';
 import { useUserStore } from '../../store';
 import { logoPath } from '../../utils/utils';
+import { UserData } from '../../utils/types';
 
 const pages = ['Iniciar Sesión'];
 
@@ -23,8 +26,10 @@ const TopBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const navigate = useNavigate();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const userInfo: any | null = useUserStore((state) => state.user);
+  const userInfo: UserData | null = useUserStore((state) => state.user, shallow);
+  // const paw = useUserStore.getState().user
+  // const unsub1 = useUserStore.subscribe(console.log);
+  // console.log(paw);
 
   useEffect(() => {
     const onError = () => navigate('/login');
@@ -58,6 +63,8 @@ const TopBar = () => {
       navigate('/login');
     }
   };
+
+  console.log(userInfo?.budget);
 
   return (
     <AppBar position="static" sx={{ height: '70px' }}>
@@ -108,9 +115,19 @@ const TopBar = () => {
           </Box> */}
           { currentUser && userInfo ? (
             <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center' }}>
-              <Typography sx={{ pr: 1.5 }}>{userInfo.name}</Typography>
+              <Box sx={{ pr: 1.5 }}>
+                <Typography sx={{ lineHeight: '1.3' }}>{userInfo.name}</Typography>
+                <Typography sx={{ lineHeight: '1.3' }}>
+                  <NumericFormat
+                    value={userInfo.budget}
+                    thousandSeparator=","
+                    displayType="text"
+                    renderText={(value) => `$${value}`}
+                  />
+                </Typography>
+              </Box>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src={`${logoPath}${userInfo.logo}`} />
+                <Avatar alt={userInfo.name} src={`${logoPath}${userInfo.logo}`} />
               </IconButton>
               <Menu
                 sx={{ mt: '45px' }}

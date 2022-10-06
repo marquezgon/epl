@@ -171,7 +171,6 @@ export default function EnhancedTable(props: TransferablesTableProps) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const rows = props.players;
-  console.log(rows);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,

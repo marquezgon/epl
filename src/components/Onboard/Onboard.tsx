@@ -79,7 +79,7 @@ const Onboard = () => {
             updateShowOnboarding(false);
             navigate('/dashboard');
           },
-          variables: { logo: '', name: values.teamName, ownerName: values.fullName, psUsername: values.psUsername, username, budget: 50000000  }
+          variables: { logo: '', name: values.teamName, ownerName: values.fullName, psUsername: values.psUsername, username, budget: 60000000  }
         });
       } catch (err) {
         console.log('Error', err);

@@ -32,6 +32,10 @@ export const countryList = {
     flag: '\ud83c\udde7\ud83c\uddf7',
     text: 'Brasil'
   },
+  cameroon: {
+    flag: '\ud83c\udde8\ud83c\uddf2',
+    text: 'Camerún'
+  },
   colombia: {
     flag: '\ud83c\udde8\ud83c\uddf4',
     text: 'Colombia'

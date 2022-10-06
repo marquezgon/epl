@@ -11,7 +11,7 @@ interface ModalState {
   removeToast: () => void;
 }
 
-const useModalStore = create<ModalState>()((set) => ({
+const useModalStore = create<ModalState>((set) => ({
   showOnboarding: false,
   updateShowOnboarding: (showOnboarding) => set(() => ({ showOnboarding })),
   showPlayerDrawer: false,
