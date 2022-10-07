@@ -18,6 +18,7 @@ import { AppSyncConfig } from './aws-exports';
 import { getCurrentSession } from './auth';
 import { useAuthStore } from './store';
 import { cache } from './utils/utils';
+import Calendar from './pages/Calendar/Calendar';
 
 const App = () => {
   const cognitoSession = useAuthStore((state) => state.cognitoSession);
@@ -70,6 +71,9 @@ const App = () => {
               renders the first one that matches the current URL. */}
           <Routes>
             <Route path='dashboard' element={<ProtectedLayout />} />
+            <Route path='calendar' element={<ProtectedLayout />}>
+              <Route path='' element={<Calendar />} />
+            </Route>
             <Route path='teams' element={<ProtectedLayout />}>
               <Route path='' element={<MyTeam />} />
             </Route>

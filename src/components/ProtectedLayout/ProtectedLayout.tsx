@@ -7,9 +7,10 @@ import Stack from '@mui/material/Stack';
 import SideBar from '../SideBar/SideBar';
 import TopBar from '../TopBar/TopBar';
 import { getCurrentUser } from '../../auth';
-import { useAuthStore, useModalStore, useUserStore } from '../../store';
+import { useAuthStore, useModalStore, useTeamStore, useUserStore } from '../../store';
 import Loading from '../Loading/Loading';
 import { lightGray } from '../../utils/colors';
+import { LIST_TEAMS } from '../../utils/gql/queries';
 
 
 const GET_TEAM = gql`
@@ -30,6 +31,7 @@ export const ProtectedLayout = () => {
   const toast = useModalStore((state) => state.toast);
   const removeToast = useModalStore((state) => state.removeToast);
   const updateUser = useUserStore((state) => state.updateUser);
+  const updateTeams = useTeamStore((state) => state.updateTeams);
   const loadingSession = useAuthStore((state) => state.loadingSession);
 
   // const { user } = useAuth();
@@ -41,6 +43,11 @@ export const ProtectedLayout = () => {
   const currentUser = getCurrentUser();
   
   const getTeam = useQuery(GET_TEAM, { variables: { username: currentUser?.getUsername() } });
+  const teams = useQuery(LIST_TEAMS, { variables: { limit: 12 }, onCompleted: (data) => {
+    if (data?.listTeams?.items) {
+      updateTeams(data.listTeams.items);
+    }
+  } });
 
   if (loadingSession) {
     return <Loading />;
@@ -48,9 +55,11 @@ export const ProtectedLayout = () => {
   
   updateUser(getTeam.data?.getTeamByUsername);
   
-  if (getTeam.loading) {
+  if (getTeam.loading || teams.loading) {
     return <Loading />;
   }
+
+  console.log(teams);
 
   return (
     <>

@@ -73,3 +73,14 @@ export const GET_MY_TEAM = gql`
     }
   }
 `;
+
+export const GET_FIXTURES_BY_WEEK = gql`
+  query GetFixturesByWeek($tournamentId: ID!, $week: Int!) {
+    getFixturesByWeek(tournamentId: $tournamentId, week: $week) {
+      id
+      home_team_id
+      away_team_id
+      week
+    }
+  }
+`;

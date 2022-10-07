@@ -3,6 +3,18 @@ import { AlertColor } from '@mui/material/Alert';
 
 export type MarketplaceStatus = 'open' | 'closed';
 
+export interface BasicUserData {
+  name: string;
+  id: string;
+}
+
+export interface FixturesData {
+  id: string;
+  home_team_id: string;
+  away_team_id: string;
+  week: number;
+}
+
 export interface UserData {
   budget: number;
   logo: string;
