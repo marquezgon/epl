@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useQuery } from '@apollo/client';
+import { NumericFormat } from 'react-number-format';
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 import Paper from '@mui/material/Paper';
@@ -17,11 +18,16 @@ interface TeamItem {
   name: string;
 }
 
+interface PlayerMoneyInfo {
+  value: number;
+  wage: number;
+}
+
 const MyTeam = () => {
   const user = useUserStore((state) => state.user);
   const teamId = user?.id;
   const [selectedId, setSelectedId] = useState(teamId);
-  console.log('selected', selectedId);
+
   const { loading, error, data } = useQuery(GET_MY_TEAM, { variables: { teamId: selectedId } });
   const teams = useQuery(LIST_TEAMS, { variables: { limit: 12 } });
 
@@ -42,23 +48,51 @@ const MyTeam = () => {
       <PlayerCard player={player} size={CardSize.SMALL} />
     </Box>
   ));
-
-  const renderItems = teams.data.listTeams.items.map((item: TeamItem) => (
+  
+  const teamItems = teams.data.listTeams.items;
+  const renderItems = teamItems.map((item: TeamItem) => (
     <MenuItem key={item.id} value={item.id}>{item.name}</MenuItem>
   ));
+  const teamInfo = teamItems.find((item: TeamItem) => item.id === selectedId);
+  const rosterValue = getPlayersByTeam.reduce((acc: PlayerMoneyInfo, player: PlayerData) => {
+    return { value: acc.value + player.price, wage: acc.wage + player.wage };
+  }, { value: 0, wage: 0 });
 
   return (
     <Box sx={{ width: '100%', maxHeight: '100%', overflowY: 'scroll' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
         <Box sx={{ p: 4 }}>
-          <Stack direction='row'>
-            <Typography
-              sx={{ flex: '5', color: black, }}
-              variant="h4"
-            >
-              Equipos
-            </Typography>
+          <Stack direction='row' justifyContent='space-between'>
+            <Box>
+              <Typography
+                sx={{ flex: '5', color: black, }}
+                variant="h4"
+              >
+                {teamInfo.name}
+              </Typography>
+              <NumericFormat
+                value={rosterValue.value}
+                thousandSeparator=','
+                displayType='text'
+                renderText={(value) => (
+                  <Typography sx={{ fontSize: '1.2rem', pt: 1.5 }}>
+                    Valor de la plantilla: <b>${value}</b>
+                  </Typography>
+                )}
+              />
+              <NumericFormat
+                value={rosterValue.wage}
+                thousandSeparator=','
+                displayType='text'
+                renderText={(value) => (
+                  <Typography sx={{ fontSize: '1.2rem' }}>
+                    Salario de la plantilla (por partido): <b>${value}</b>
+                  </Typography>
+                )}
+              />
+            </Box>
             <Select
+              sx={{ alignSelf: 'center' }}
               value={selectedId}
               displayEmpty
               onChange={(item: SelectChangeEvent) => setSelectedId(item.target.value)}
