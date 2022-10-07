@@ -99,6 +99,16 @@ const PlayerCard = (props: PlayerCardProps) => {
             </Typography>
           </>
         )}
+        <NumericFormat
+          value={player.wage}
+          thousandSeparator=','
+          displayType='text'
+          renderText={(value) => (
+            <Typography variant='body2' color='text.secondary'>
+              Salario: ${value}
+            </Typography>
+          )}
+        />
       </CardContent>
     </Card>
   );
