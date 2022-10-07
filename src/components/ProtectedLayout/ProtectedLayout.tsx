@@ -59,8 +59,6 @@ export const ProtectedLayout = () => {
     return <Loading />;
   }
 
-  console.log(teams);
-
   return (
     <>
       <Stack spacing={8} sx={{ width: '100%' }}>

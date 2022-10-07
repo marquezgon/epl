@@ -31,8 +31,6 @@ const Calendar = () => {
     <MenuItem key={week} value={week.toString()}>Semana {week}</MenuItem>
   )); 
 
-  console.log(data);
-
   const renderFixtures = data.getFixturesByWeek.map((fixture: FixturesData) => {
     return (
       <Box key={fixture.id}>

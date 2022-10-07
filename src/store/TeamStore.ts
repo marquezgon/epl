@@ -6,7 +6,7 @@ interface TeamState {
   updateTeams: (teams: BasicUserData[]) => void;
 }
 
-const useUserStore = create<TeamState>((set, get) => ({
+const useUserStore = create<TeamState>((set) => ({
   teams: new Map(),
   updateTeams: (teams: BasicUserData[]) => {
     set((state) => {
@@ -15,7 +15,7 @@ const useUserStore = create<TeamState>((set, get) => ({
       return { teams: updatedTeams }
     });
     // this prints the latest state
-    console.log(get().teams)
+    // console.log(get().teams)
   },
 }));
 
