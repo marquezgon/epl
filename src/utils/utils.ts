@@ -36,9 +36,21 @@ export const countryList = {
     flag: '\ud83c\udde8\ud83c\uddf2',
     text: 'Camerún'
   },
+  canada: {
+    flag: '\ud83c\udde8\ud83c\udde6',
+    text: 'Canadá'
+  },
+  'china pr': {
+    flag: '\ud83c\udde8\ud83c\uddf3',
+    text: 'China'
+  },
   colombia: {
     flag: '\ud83c\udde8\ud83c\uddf4',
     text: 'Colombia'
+  },
+  'costa rica': {
+    flag: '\ud83c\udde8\ud83c\uddf7',
+    text: 'Costa Rica'
   },
   croatia: {
     flag: '\ud83c\udded\ud83c\uddf7',
@@ -67,6 +79,10 @@ export const countryList = {
   germany: {
     flag: '\ud83c\udde9\ud83c\uddea',
     text: 'Alemania'
+  },
+  ghana: {
+    flag: '\ud83c\uddec\ud83c\udded',
+    text: 'Ghana'
   },
   'republic of ireland': {
     flag: '\ud83c\uddee\ud83c\uddea',
@@ -120,9 +136,17 @@ export const countryList = {
     flag: '\ud83c\uddf5\ud83c\uddea',
     text: 'Perú'
   },
+  poland: {
+    flag: '\ud83c\uddf5\ud83c\uddf1',
+    text: 'Polonia'
+  },
   portugal: {
     flag: '\ud83c\uddf5\ud83c\uddf9',
     text: 'Portugal'
+  },
+  romania: {
+    flag: '\ud83c\uddf7\ud83c\uddf4',
+    text: 'Rumania'
   },
   scotland: {
     flag: '\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc73\udb40\udc63\udb40\udc74\udb40\udc7f',
