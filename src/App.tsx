@@ -9,16 +9,17 @@ import { createAuthLink } from 'aws-appsync-auth-link';
 import { createSubscriptionHandshakeLink } from 'aws-appsync-subscription-link';
 import { ApolloProvider, ApolloClient, ApolloLink } from '@apollo/client';
 import ProtectedLayout from './components/ProtectedLayout/ProtectedLayout';
-import Transferables from './pages/Transferables/Transferables';
+import Calendar from './pages/Calendar/Calendar';
 import Landing from './pages/Landing/Landing';
 import Login from './pages/Login/Login';
+import Standings from './pages/Standings/Standings';
 import MyTeam from './pages/Teams/Teams';
+import Transferables from './pages/Transferables/Transferables';
 import theme from './theme';
 import { AppSyncConfig } from './aws-exports';
 import { getCurrentSession } from './auth';
 import { useAuthStore } from './store';
 import { cache } from './utils/utils';
-import Calendar from './pages/Calendar/Calendar';
 
 const App = () => {
   const cognitoSession = useAuthStore((state) => state.cognitoSession);
@@ -71,6 +72,9 @@ const App = () => {
               renders the first one that matches the current URL. */}
           <Routes>
             <Route path='dashboard' element={<ProtectedLayout />} />
+            <Route path='standings' element={<ProtectedLayout />}>
+              <Route path='' element={<Standings />} />
+            </Route>
             <Route path='calendar' element={<ProtectedLayout />}>
               <Route path='' element={<Calendar />} />
             </Route>

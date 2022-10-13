@@ -8,6 +8,15 @@ export interface BasicUserData {
   id: string;
 }
 
+export interface StandingsData {
+  teamId: string;
+  wins: number;
+  losses: number;
+  draws: number;
+  goalsFavor: number;
+  goalsAgainst: number;
+}
+
 export interface FixturesData {
   id: string;
   home_team_id: string;

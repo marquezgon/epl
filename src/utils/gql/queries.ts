@@ -84,3 +84,16 @@ export const GET_FIXTURES_BY_WEEK = gql`
     }
   }
 `;
+
+export const GET_STANDINGS = gql`
+  query GetStandings($tournamentId: ID!) {
+    getStandings(tournamentId: $tournamentId) {
+      teamId: team_id
+      wins
+      losses
+      draws
+      goalsFavor: goals_favor
+      goalsAgainst: goals_against
+    }
+  }
+`;
